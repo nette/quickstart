@@ -9,4 +9,20 @@ use Nette;
 
 final class HomepagePresenter extends Nette\Application\UI\Presenter
 {
+	private Nette\Database\Explorer $database;
+
+
+	public function __construct(Nette\Database\Explorer $database)
+	{
+		$this->database = $database;
+	}
+
+
+	public function renderDefault(int $page = 1): void
+	{
+		$this->template->page = $page;
+		$this->template->posts = $this->database->table('posts')
+			->order('created_at DESC')
+			->page($page, 5);
+	}
 }
